@@ -6,22 +6,21 @@
 #include <vector>
 #include <sstream>
 
-const int SAMPLE_RATE = 44100;
-const double PI = 3.14159265358979323846;
-const int AMPLITUDE = 30000;
+const int SAMPLE_RATE = 44100; // Standard sample rate
+const double PI = 3.14159265358979323846; // Pi constant for calculations
+const int AMPLITUDE = 30000; // Amplitude
 const double DURATION = 0.4; // Tone duration in seconds
 
-// Map for DTMF tones
+// Mapping for DTMF tones
 std::map<char, std::pair<int, int>> dtmfFrequencies = {
     {'#', {941, 1477}}, {'*', {941, 1209}}, // Start and End Signals
     {'F(1)', {697, 1209}}, {'B(5)', {770, 1336}}, // Forward and Back
     {'L(9)', {852, 1477}}, {'R(0)', {941, 1336}}, // Left and Right
     {'0', {941, 1336}}, {'1', {697, 1209}}, {'2', {697, 1336}}, {'3', {697, 1477}}, 
-    {'4', {770, 1209}}, {'5', {770, 1336}}, {'6', {770, 1477}}, {'7', {852, 1209}}, 
-    {'8', {852, 1336}}, {'9', {852, 1477}}  // Digits
+    {'4', {770, 1209}}, {'5', {770, 1336}}, {'6', {770, 1477}}, {'7', {852, 1209}}, {'8', {852, 1336}}, {'9', {852, 1477}}  
 };
 
-// Updated generateDTMFTone function with debugging
+// DTMF tone generation with debugging
 void generateDTMFTone(char c, std::vector<sf::Int16>& samples, double durationInSeconds) {
     if (dtmfFrequencies.find(c) == dtmfFrequencies.end()) {
         std::cerr << "Error: Character '" << c << "' not found in DTMF frequencies map.\n";
@@ -38,7 +37,7 @@ void generateDTMFTone(char c, std::vector<sf::Int16>& samples, double durationIn
         samples[i] = static_cast<sf::Int16>(AMPLITUDE * sample);
     }
 
-    // Debugging: Log sample size
+    // Debugging, Log sample size
     if (samples.empty()) {
         std::cerr << "Error: Samples array is empty for character '" << c << "'.\n";
     } else {
@@ -65,7 +64,7 @@ std::string buildMessage(char command) {
     return "#" + std::string(1, command) + checksumStr + "*";
 }
 
-// Updated transmitMessage function with validation
+// Transmit message function with validation
 void transmitMessage(const std::string& message, sf::SoundBuffer& buffer, sf::Sound& sound) {
     for (char c : message) {
         std::vector<sf::Int16> samples;
@@ -114,7 +113,6 @@ int main() {
                    sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
                    sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
                    sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
-                // Hold until the key is released
             }
         }
     }
@@ -123,4 +121,5 @@ int main() {
     return 0;
 }
 
+// Compile command on mac:
 // g++ DTMF2.cpp -o DTMF2 -I/opt/homebrew/opt/sfml/include -L/opt/homebrew/opt/sfml/lib -lsfml-audio -lsfml-system -lsfml-window -std=c++11
