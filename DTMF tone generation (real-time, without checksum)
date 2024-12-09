@@ -108,4 +108,4 @@ int main() {
 }
 
 // Compile command on mac:
-// g++ DTMF2nocheck.cpp -o DTMF2nocheck -I/opt/homebrew/opt/sfml/include -L/opt/homebrew/opt/sfml/lib -lsfml-audio -lsfml-system -lsfml-window -std=c++11
+// g++ DTMFrealtimeNOcheck.cpp -o DTMFrealtimeNOcheck -I/opt/homebrew/opt/sfml/include -L/opt/homebrew/opt/sfml/lib -lsfml-audio -lsfml-system -lsfml-window -std=c++11
