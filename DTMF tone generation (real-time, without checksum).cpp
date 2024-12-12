@@ -4,19 +4,17 @@
 #include <iostream>
 #include <map>
 #include <vector>
-#include <sstream>
 
 const int SAMPLE_RATE = 44100; // Standard sample rate
 const double PI = 3.14159265358979323846; // Pi constant for calculations
 const int AMPLITUDE = 30000; // Amplitude
-const double DURATION = 0.3; // Tone duration in seconds
+const double DURATION = 0.4; // Tone duration in seconds
 
 // Mapping for DTMF tones
 std::map<char, std::pair<int, int>> dtmfFrequencies = {
-    {'#', {941, 1477}}, {'*', {941, 1209}}, // Start and End Signals
-    {'F', {697, 1209}}, {'B', {770, 1336}}, // Forward (1) and Back (5)
-    {'L', {852, 1477}}, {'R', {941, 1336}}, // Left (9) and Right (0)
-    {'0', {941, 1336}}, {'1', {697, 1209}}, {'2', {697, 1336}}, {'3', {697, 1477}}, 
+    {'F', {852, 1336}}, {'B', {697, 1336}}, // Forward (F) and Back (B)
+    {'L', {770, 1209}}, {'R', {770, 1477}}, // Left (L) and Right (R)
+    {'0', {941, 1336}}, {'1', {697, 1209}}, {'2', {697, 1336}}, {'3', {697, 1477}},
     {'4', {770, 1209}}, {'5', {770, 1336}}, {'6', {770, 1477}}, {'7', {852, 1209}}, {'8', {852, 1336}}, {'9', {852, 1477}}  
 };
 
@@ -43,11 +41,6 @@ void generateDTMFTone(char c, std::vector<sf::Int16>& samples, double durationIn
     } else {
         std::cout << "Generated " << samples.size() << " samples for character '" << c << "'.\n";
     }
-}
-
-// Build the command message
-std::string buildMessage(char command) {
-    return "#" + std::string(1, command) + "*";
 }
 
 // Transmit message function with validation
@@ -87,9 +80,10 @@ int main() {
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) command = 'B';
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) command = 'L';
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) command = 'R';
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) command = '5'; // Added key press for '5'
 
         if (command != '\0') {
-            std::string message = buildMessage(command);
+            std::string message(1, command); // Directly use the command as the message
             std::cout << "Sending command: " << message << std::endl;
 
             transmitMessage(message, buffer, sound);
@@ -98,7 +92,8 @@ int main() {
             while (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) ||
                    sf::Keyboard::isKeyPressed(sf::Keyboard::Down) ||
                    sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
-                   sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) {
+                   sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
+                   sf::Keyboard::isKeyPressed(sf::Keyboard::Num5)) {
             }
         }
     }
